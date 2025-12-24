@@ -14,7 +14,7 @@ class Shop:
             total += value * self.products[key]
         return round(total, 2)
 
-    def print_receipt(self, customer_name: str, cart: dict):
+    def print_receipt(self, customer_name: str, cart: dict) -> None:
         current_time = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         print(f"Date: {current_time}")
         print(f"Thanks, {customer_name}, for your purchase!")
