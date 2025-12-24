@@ -14,6 +14,12 @@ class Shop:
             total += value * self.products[key]
         return round(total, 2)
 
+    @staticmethod
+    def _format_price(value: float | int) -> int | float:
+        if isinstance(value, float) and value.is_integer():
+            return int(value)
+        return value
+
     def print_receipt(self, customer_name: str, cart: dict) -> None:
         current_time = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         print(f"Date: {current_time}")
@@ -23,12 +29,11 @@ class Shop:
         for product, quantity in cart.items():
             cost = quantity * self.products[product]
             cost = round(cost, 2)
-            if isinstance(cost, float) and cost.is_integer():
-                cost = int(cost)
+            cost = self._format_price(round(cost, 2))
 
             print(f"{quantity} {product}s for {cost} dollars")
 
-        total = self.cart_cost(cart)
+        total = self._format_price(self.cart_cost(cart))
         if isinstance(total, float) and total.is_integer():
             total = int(total)
 

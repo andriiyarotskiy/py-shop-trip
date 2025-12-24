@@ -26,33 +26,38 @@ def shop_trip() -> None:
             print(f"{customer.name} has {customer.money} dollars")
             trip_costs = []
 
+            # Зберігаємо витрати на кожен магазин та виводимо
             for shop in shops:
                 cost = customer.trip_cost(shop, fuel_price)
                 trip_costs.append((shop, cost))
                 print(f"{customer.name}'s "
                       f"trip to the {shop.name} costs {cost}")
 
+            # Знаходимо найдешевший магазин
             cheapest_shop, cheapest_cost = min(trip_costs, key=lambda x: x[1])
 
             if customer.money >= cheapest_cost:
+                # Зберігаємо домашню локацію перед поїздкою
+                home_location = customer.location.copy()
+
+                # Поїздка в магазин
                 print(f"{customer.name} rides to {cheapest_shop.name}\n")
                 customer.location = cheapest_shop.location.copy()
+
+                # Чек
                 cheapest_shop.print_receipt(
                     customer.name,
-                    customer.product_cart
-                )
+                    customer.product_cart)
 
-                # Return home
-                home_location = customer.location.copy()
-                customer.location = cheapest_shop.location.copy()
+                # Повернення додому
                 print(f"{customer.name} rides home")
                 customer.location = home_location
 
-                # Update money
+                # Оновлення грошей
                 customer.money -= cheapest_cost
                 customer.money = round(customer.money, 2)
                 print(f"{customer.name} now has {customer.money} dollars")
                 print()
             else:
-                print(f"{customer.name} doesn't have enough money "
-                      f"to make a purchase in any shop")
+                print(f"{customer.name} doesn't have"
+                      f" enough money to make a purchase in any shop")
