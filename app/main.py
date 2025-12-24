@@ -24,17 +24,15 @@ def shop_trip() -> None:
 
         for customer in customers:
             print(f"{customer.name} has {customer.money} dollars")
+            trip_costs = []
+
             for shop in shops:
                 cost = customer.trip_cost(shop, fuel_price)
+                trip_costs.append((shop, cost))
+                print(f"{customer.name}'s "
+                      f"trip to the {shop.name} costs {cost}")
 
-                print(f"{customer.name}'s trip "
-                      f"to the {shop.name} costs {cost}")
-
-            cheapest_shop, cheapest_cost = min(
-                [(shop, customer.trip_cost(shop, fuel_price))
-                 for shop in shops],
-                key=lambda x: x[1]
-            )
+            cheapest_shop, cheapest_cost = min(trip_costs, key=lambda x: x[1])
 
             if customer.money >= cheapest_cost:
                 print(f"{customer.name} rides to {cheapest_shop.name}\n")
@@ -45,10 +43,10 @@ def shop_trip() -> None:
                 )
 
                 # Return home
+                home_location = customer.location.copy()
+                customer.location = cheapest_shop.location.copy()
                 print(f"{customer.name} rides home")
-                c_customers = config["customers"]
-                location = c_customers[customers.index(customer)]["location"]
-                customer.location = location
+                customer.location = home_location
 
                 # Update money
                 customer.money -= cheapest_cost
